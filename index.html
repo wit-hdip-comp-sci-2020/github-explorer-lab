@@ -16,6 +16,27 @@
           <div class="uk-text-muted uk-text-small">Fun Repos to Explore</div>
         </div>
       </div>
+      <div class="uk-width-1-2@m uk-card uk-card-default uk-padding">
+        <fieldset class="uk-fieldset">
+          <legend class="uk-legend">Enter todo item</legend>
+          <div class="uk-margin">
+            <input id="repo-id" class="uk-input" type="text" placeholder="Repo Name">
+          </div>
+        </fieldset>
+        <button onClick="fetchRepos()" id="add-btn" class="uk-button uk-button-default">Fetch</button>
+      </div>
+      <table id="todo-table" class="uk-table uk-table-divider">
+        <caption> Repos :</caption>
+        <thead>
+          <tr>
+            <th>Repo Name</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr></tr>
+        </tbody>
+      </table>
     </div>
+    <script src="explorer.js" type="text/javascript"></script>
   </body>
 </html>
