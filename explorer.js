@@ -2,7 +2,7 @@ function renderRepo(repo) {
   const table = document.getElementById("repo-table");
   const row = table.insertRow(-1);
   const nameCell = row.insertCell(0);
-  nameCell.innerText = repo.name;
+  nameCell.innerHTML = `<a href=${repo.html_url}> ${repo.name} </a>`;
   const descriptionCell = row.insertCell(1);
   descriptionCell.innerText = repo.description;
 }
