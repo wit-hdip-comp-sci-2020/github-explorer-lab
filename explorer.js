@@ -1,4 +1,4 @@
-function renderRepo(repo) {
+async function renderRepo(repo) {
   const table = document.getElementById("repo-table");
   const row = table.insertRow(-1);
   const nameCell = row.insertCell(0);
@@ -7,6 +7,12 @@ function renderRepo(repo) {
   descriptionCell.innerText = repo.description;
   const sizeCell = row.insertCell(2);
   sizeCell.innerText = repo.size;
+  const response = await fetch(repo.languages_url);
+  if (response.status != 404) {
+    const languages = await response.json();
+    const languagesCell = row.insertCell(3);
+    languagesCell.innerText = languages;
+  }
 }
 
 function renderAllRepos(repos) {
