@@ -3,6 +3,8 @@ function renderRepo(repo) {
   const row = table.insertRow(-1);
   const nameCell = row.insertCell(0);
   nameCell.innerText = repo.name;
+  const descriptionCell = row.insertCell(1);
+  descriptionCell.innerText = repo.description;
 }
 
 function renderAllRepos(repos) {
