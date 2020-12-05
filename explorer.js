@@ -35,7 +35,7 @@ function renderAllRepos(repos) {
 
 async function fetchRepos() {
   const githubId = document.getElementById("github-id").value;
-  const response = await fetch("https://api.github.com/users/" + githubId + "/repos", options);
+  const response = await fetch("https://api.github.com/users/" + githubId + "/repos?page=1&per_page=100", options);
   if (response.status != 404) {
     const repos = await response.json();
     renderAllRepos(repos);
