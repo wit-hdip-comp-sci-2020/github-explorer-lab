@@ -11,7 +11,7 @@ async function renderRepo(repo) {
   if (response.status != 404) {
     const languages = await response.json();
     const languagesCell = row.insertCell(3);
-    languagesCell.innerText = languages;
+    languagesCell.innerText = Object.getOwnPropertyNames(languages);
   }
 }
 
