@@ -5,6 +5,8 @@ function renderRepo(repo) {
   nameCell.innerHTML = `<a href=${repo.html_url}> ${repo.name} </a>`;
   const descriptionCell = row.insertCell(1);
   descriptionCell.innerText = repo.description;
+  const sizeCell = row.insertCell(2);
+  sizeCell.innerText = repo.size;
 }
 
 function renderAllRepos(repos) {
