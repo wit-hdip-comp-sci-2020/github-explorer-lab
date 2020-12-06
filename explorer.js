@@ -1,5 +1,5 @@
-const user = 'YOUR-GITHUB-ID';
-const token = 'YOUR-PERSONAL-ACCESS-TOKEN';
+const user = 'edeleastar';
+const token = 'a550e1a5953f810f5494dc9b79d3e8d20781b048';
 const creds = `${user}:${token}`;
 const auth = btoa(creds);
 
@@ -34,11 +34,24 @@ function renderAllRepos(repos) {
 }
 
 async function fetchRepos() {
+  clearRepoTable();
+  let result = document.getElementById("result-msg");
   const githubId = document.getElementById("github-id").value;
   const response = await fetch("https://api.github.com/users/" + githubId + "/repos?page=1&per_page=100", options);
-  if (response.status != 404) {
+  if (response.status == 200) {
     const repos = await response.json();
     renderAllRepos(repos);
-    console.log(repos);
+    result.textContent = `${repos.length} Repos`;
+  } else {
+    result.textContent = "Error";
   }
 }
+
+function clearRepoTable() {
+  let table = document.getElementById("repo-table");
+  var rowCount = table.rows.length;
+  for (var i = 1; i < rowCount; i++) {
+    table.deleteRow(-1);
+  }
+}
+
