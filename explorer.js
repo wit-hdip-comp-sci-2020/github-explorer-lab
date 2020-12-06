@@ -1,5 +1,5 @@
-const user = 'edeleastar';
-const token = 'a550e1a5953f810f5494dc9b79d3e8d20781b048';
+const user = 'YOUR-GITHUB-ID';
+const token = 'YOUR-PERSONAL-ACCESS-TOKEN';
 const creds = `${user}:${token}`;
 const auth = btoa(creds);
 
@@ -10,48 +10,64 @@ const options = {
   }
 }
 
-async function renderRepo(repo) {
-  const table = document.getElementById("repo-table");
-  const row = table.insertRow(-1);
-  const nameCell = row.insertCell(0);
-  nameCell.innerHTML = `<a href=${repo.html_url}> ${repo.name} </a>`;
-  const descriptionCell = row.insertCell(1);
-  descriptionCell.innerText = repo.description;
-  const sizeCell = row.insertCell(2);
-  sizeCell.innerText = repo.size;
-  const response = await fetch(repo.languages_url, options);
-  if (response.status != 404) {
+async function fetchLanguages(languagesUrl) {
+  let languageText = "";
+  const response = await fetch(languagesUrl, options);
+  if (response.status == 200) {
     const languages = await response.json();
-    const languagesCell = row.insertCell(3);
-    languagesCell.innerText = Object.getOwnPropertyNames(languages);
+    languageText = Object.getOwnPropertyNames(languages)
+  }
+  return languageText;
+}
+
+async function fetchRepoList(githubId, nmrRepos) {
+  let repos = [];
+  const response = await fetch(`https://api.github.com/users/${githubId}/repos?page=1&per_page=${nmrRepos}`, options);
+  if (response.status == 200) {
+    repos = await response.json();
+  }
+  return repos;
+}
+
+function renderCell(row, col, value) {
+  const cell = row.insertCell(col);
+  cell.innerHTML = value;
+}
+
+async function renderRepo(repo, tableID) {
+  const table = document.getElementById(tableID);
+  const row = table.insertRow(-1);
+  renderCell(row, 0, `<a href=${repo.html_url}> ${repo.name} </a>`);
+  renderCell(row,1, repo.description)
+  renderCell(row,2, repo.size)
+  const languages = await fetchLanguages(repo.languages_url);
+  renderCell(row,3, languages)
+}
+
+function renderAllRepos(repos, tableID) {
+  for (let i = 0; i < repos.length; i++) {
+    renderRepo(repos[i], tableID);
   }
 }
 
-function renderAllRepos(repos) {
-  for (let i = 0; i < repos.length; i++) {
-    renderRepo(repos[i]);
+function clearRepoTable(tableID) {
+  let table = document.getElementById(tableID);
+  var rowCount = table.rows.length;
+  for (var i = 1; i < rowCount; i++) {
+    table.deleteRow(-1);
   }
 }
 
 async function fetchRepos() {
-  clearRepoTable();
+  clearRepoTable("repo-table");
   let result = document.getElementById("result-msg");
   const githubId = document.getElementById("github-id").value;
-  const response = await fetch("https://api.github.com/users/" + githubId + "/repos?page=1&per_page=100", options);
-  if (response.status == 200) {
-    const repos = await response.json();
-    renderAllRepos(repos);
+  const repos = await fetchRepoList(githubId, 20)
+  if (repos.length > 0) {
+    renderAllRepos(repos, "repo-table");
     result.textContent = `${repos.length} Repos`;
   } else {
     result.textContent = "Error";
-  }
-}
-
-function clearRepoTable() {
-  let table = document.getElementById("repo-table");
-  var rowCount = table.rows.length;
-  for (var i = 1; i < rowCount; i++) {
-    table.deleteRow(-1);
   }
 }
 
